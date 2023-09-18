@@ -23,7 +23,7 @@ pub fn read_str(file: &mut File, len: usize) -> String {
 pub fn read_usize(file: &mut File) -> usize {
     let mut buf = [0u8; 4];
     file.read_exact(&mut buf).unwrap();
-    i32::from_le_bytes(buf) as usize
+    u32::from_le_bytes(buf) as usize
 }
 
 pub fn str_lookup(str: &str, vocab: &[String]) -> Option<usize> {
