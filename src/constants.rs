@@ -100,20 +100,26 @@ impl Config {
     }
 
     pub fn load(file: &mut File) -> Self {
+        let mut buf = [0u8; 4];
+        file.read_exact(&mut buf).unwrap();
+        println!("First 4 bytes: {:?}", buf);
+        let dim = u32::from_le_bytes(buf) as usize;
+        let size = read_usize(file);
+        println!("dim from_le_bytes:{}\nreaded size:{}", dim, size);
         let mut conf = Config {
-            dim: read_usize(file),
-            hidden_dim: read_usize(file),
-            n_layers: read_usize(file),
-            n_heads: read_usize(file),
-            n_kv_heads: read_usize(file),
+            dim: size,
+            hidden_dim: size,
+            n_layers: size,
+            n_heads: size,
+            n_kv_heads: size,
             vocab_size: 0,
             seq_len: 0,
             shared_weight: false,
         };
-        let vocab_size = read_usize(file) as i32;
+        let vocab_size = size as i32;
         conf.vocab_size = vocab_size.abs() as usize;
         conf.shared_weight = vocab_size > 0;
-        conf.seq_len = read_usize(file);
+        conf.seq_len = size;
         conf.check_static();
         conf
     }
