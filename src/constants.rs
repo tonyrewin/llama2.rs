@@ -100,12 +100,8 @@ impl Config {
     }
 
     pub fn load(file: &mut File) -> Self {
-        let mut buf = [0u8; 4];
-        file.read_exact(&mut buf).unwrap();
-        println!("First 4 bytes: {:?}", buf);
-        let dim = u32::from_le_bytes(buf) as usize;
         let size = read_usize(file);
-        println!("dim from_le_bytes:{}\nreaded size:{}", dim, size);
+        println!("readed size:{}", size);
         let mut conf = Config {
             dim: size,
             hidden_dim: size,
